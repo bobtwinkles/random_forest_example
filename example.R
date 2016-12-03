@@ -3,11 +3,11 @@ data(iris)
 
 set.seed(0)
 
-iris.subset <- function(m, n) {
-  s1 <- sample(1:m, n)
-  s2 <- sample((m+1):(2*m), n)
-  s3 <- sample((2*m+1):(3*m), n)
-  return(c(s1, s2, s3))
+iris.subset <- function(m, n, r=F) {
+  return(c(sapply(0:2,
+    function(x) sample(
+      ((x*m)+1):((x+1)*m), n,
+      replace=r))))
 }
 
 iris.i <- iris.subset(50, 30)
@@ -15,10 +15,11 @@ iris.train <- iris[iris.i,]
 iris.test <- iris[-iris.i,]
 
 forest <- list()
-n.trees <- 100
+n.trees <- 300
 for (i in 1:n.trees) {
-  iris.s <- iris.subset(30, 25);
-  iris.sd <- iris.train[iris.s,]
+  iris.s <- iris.subset(30, 30, T);
+  iris.f <- c(sample(1:4, 3), 5)
+  iris.sd <- iris.train[iris.s,iris.f]
   forest[[i]] <- rpart(
     Species ~ .,
     data=iris.sd)
@@ -33,3 +34,5 @@ for (i in 2:n.trees) {
 pred <- colnames(pred)[
   apply(pred, 1, which.max)
 ]
+
+pred.one <- predict(rpart(Species ~., iris.train), iris.test, "class")
