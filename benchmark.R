@@ -32,7 +32,11 @@ benchmark.train <- microbenchmark(
   svm(Species ~., iris.train),
   rpart(Species ~., iris.train),
   randomForest(Species ~., iris.train),
-  times=100
+  times=100,
+  control=list(warmup=5)
+)
+levels(benchmark.train$expr) <- c(
+  "lda", "qda", "svm", "tree", "forest"
 )
 
 benchmark.predict <- microbenchmark(
@@ -41,7 +45,11 @@ benchmark.predict <- microbenchmark(
   predict(svm.model, newdata=iris.test),
   predict(tree.model, newdata=iris.test),
   predict(forest.model, newdata=iris.test),
-  times=100
+  times=100,
+  control=list(warmup=5)
+)
+levels(benchmark.predict$expr) <- c(
+  "lda", "qda", "svm", "tree", "forest"
 )
 
 cmd.args <- commandArgs(trailingOnly=T)

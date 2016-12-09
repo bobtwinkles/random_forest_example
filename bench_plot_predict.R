@@ -1,7 +1,7 @@
 cmd.args <- commandArgs(trailingOnly=T)
 load(cmd.args[1])
 
-png(file=cmd.args[2], width=5, height=4, units="in", res=300)
+png(file=cmd.args[2], width=5, height=6, units="in", res=300)
 plot(benchmark.predict)
 title(main="Benchamark results for prediction")
 dev.off()
